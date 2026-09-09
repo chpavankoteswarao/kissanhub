@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KISSAN-HUB — Smart Agriculture Marketplace</title>
+  <link rel="stylesheet" href="css/style.css?v=20260908_01" />
+  <link rel="stylesheet" href="css/mandiPrices.css?v=20260908_02" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS Integration for high-performance responsive utility design -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandCream: '#faf8f5',
+            brandTerracotta: '#c85a17',
+            brandTerracottaDark: '#b44f12',
+            brandGreen: '#1b5e20',
+            brandGreenLight: '#2e7d32',
+            brandGreenDark: '#0f3813'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Newsreader', 'Georgia', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body>
+
+  <!-- ==================== HEADER (SHOWN WHEN IN DASHBOARDS) ==================== -->
+  <header id="mainAppNavbar" class="navbar hidden">
+    <div class="nav-container">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button id="navBackHomeBtn" class="btn btn-secondary btn-sm" style="font-weight: 700;" title="Back to Main Website" onclick="window.showView ? window.showView('landingView') : showView('landingView')">
+          <span>←</span> <span data-i18n="back_to_home">Back to Home</span>
+        </button>
+        <a href="#" class="brand-sprout-logo" onclick="window.showView ? window.showView('landingView') : showView('landingView'); return false;">
+          <div class="sprout-icon-circle">🌱</div>
+          <span data-i18n="brand_name">KISSAN-HUB</span>
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap;">
+        <!-- Language Selector -->
+        <div class="lang-selector">
+          <span>🌐</span>
+          <select id="globalLanguageSelect" class="lang-select-box" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+            <option value="ml">മലയാളം (Malayalam)</option>
+            <option value="mr">मराठी (Marathi)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+            <option value="gu">ગુજરાતી (Gujarati)</option>
+            <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+            <option value="or">ଓଡ଼ିଆ (Odia)</option>
+          </select>
+        </div>
+
+        <div id="userNavMenu" class="nav-user-badge">
+          <span>👤</span>
+          <span id="navUserName">User</span>
+        </div>
+        <button id="navLogoutBtn" class="btn btn-danger btn-sm" data-i18n="nav_logout" onclick="window.logoutUser ? window.logoutUser() : logoutUser()">🚪 Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 1. EDITORIAL SPLIT LANDING VIEW ==================== -->
+  <main id="landingView" class="view-container">
+    <!-- Active Session Top Banner on Landing Page -->
+    <div id="landingSessionNotice" class="hidden landing-session-notice">
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <span class="session-pulse-dot"></span>
+        <span>Active Session: <strong id="landingSessionName">User</strong> (<span id="landingSessionRoleBadge">Farmer</span>)</span>
+      </div>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <button id="btnLandingGoDashboard" class="btn btn-primary btn-sm" style="background: #ffffff; color: #1b5e20; font-weight: 700;" onclick="window.handleGoDashboardClick && window.handleGoDashboardClick()">Go to Dashboard →</button>
+        <button id="btnLandingLogout" class="btn btn-danger btn-sm" onclick="logoutUser()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="editorial-landing-container">
+      
+      <!-- Left Column: Editorial Content & Role Gateways -->
+      <div class="landing-left-col">
+        <!-- Top bar: Logo + Language + Portal Controls -->
+        <div class="landing-top-bar">
+          <div class="brand-sprout-logo">
+            <div class="sprout-icon-circle">🌱</div>
+            <span data-i18n="brand_name">KISSAN-HUB</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <div class="lang-selector">
+              <span>🌐</span>
+              <select id="landingLanguageSelect" class="lang-select-box" onchange="setLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="te">తెలుగు (Telugu)</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="ta">தமிழ் (Tamil)</option>
+                <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                <option value="ml">മലയാളം (Malayalam)</option>
+                <option value="mr">मराठी (Marathi)</option>
+                <option value="bn">বাংলা (Bengali)</option>
+                <option value="gu">ગુજરાતી (Gujarati)</option>
+                <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                <option value="or">ଓଡ଼ିଆ (Odia)</option>
+              </select>
+            </div>
+            <a href="/admin" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 0.35rem 0.65rem;" title="Admin Portal">🛡️ Admin</a>
+            <button id="landingTopLogoutBtn" class="btn btn-danger btn-sm hidden" style="font-size: 0.78rem; padding: 0.35rem 0.65rem;" onclick="logoutUser()">🚪 Logout</button>
+          </div>
+        </div>
+
+        <!-- Center Content -->
+        <div class="landing-center-content">
+          <div class="editorial-kicker" data-i18n="kicker">GROW • CONNECT • PROSPER</div>
+          <h1 class="editorial-heading">
+            <span data-i18n="hero_title_1">Better harvests</span><br/>
+            <span class="accent-color" data-i18n="hero_title_2">start together.</span>
+          </h1>
+          <p class="editorial-subhead" data-i18n="landing_subtitle">
+            A trusted space where farmers find fair markets, buyers find quality crops, and every exchange moves agriculture forward.
+          </p>
+
+          <!-- 2 Editorial Role Cards (Farmer & Buyer) -->
+          <div class="editorial-cards-row">
+            <!-- Farmer Card -->
+            <div id="cardRoleFarmer" class="editorial-role-card" onclick="window.handleCardRoleFarmerClick && window.handleCardRoleFarmerClick()">
+              <div>
+                <div class="role-card-icon-box">🌱</div>
+                <div class="role-card-title" data-i18n="card_farmer_title">Farmer</div>
+                <div class="role-card-desc" data-i18n="card_farmer_desc">List crops & find buyers</div>
+              </div>
+              <div class="role-card-arrow">→</div>
+            </div>
+
+            <!-- Buyer Card -->
+            <div id="cardRoleBuyer" class="editorial-role-card" onclick="window.handleCardRoleBuyerClick && window.handleCardRoleBuyerClick()">
+              <div>
+                <div class="role-card-icon-box">🏪</div>
+                <div class="role-card-title" data-i18n="card_buyer_title">Buyer</div>
+                <div class="role-card-desc" data-i18n="card_buyer_desc">Source fresh produce</div>
+              </div>
+              <div class="role-card-arrow">→</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verified Farmers Community Showcase on Main Dashboard -->
+        <div class="landing-farmers-showcase" style="margin-top: 1.5rem; margin-bottom: 1.5rem; padding: 1rem 1.25rem; background: #ffffff; border: 1px solid var(--cream-border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.85rem;">
+            <div style="display: flex; margin-left: 0.25rem;">
+              <img src="assets/images/farmer_portrait.jpg" alt="Farmer" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #ffffff; box-shadow: var(--shadow-sm);" />
+              <img src="assets/images/farmer_landscape.jpg" alt="Farmer in field" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #ffffff; margin-left: -12px; box-shadow: var(--shadow-sm);" />
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: #1b5e20; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; border: 2px solid #ffffff; margin-left: -12px;">+1.2k</div>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-dark);">1,200+ Verified Indian Farmers</div>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Actively trading across 100+ APMC Mandis daily</div>
+            </div>
+          </div>
+          <span style="font-size: 0.8rem; background: #e8f5e9; color: var(--primary-dark); padding: 0.3rem 0.65rem; border-radius: 999px; font-weight: 600;">🌾 100% Direct APMC Price</span>
+        </div>
+
+        <!-- Bottom Text -->
+        <div class="landing-bottom-note" data-i18n="footer_choice">
+          Your language, your market, your choice.
+        </div>
+      </div>
+
+      <!-- Right Column: Photography Hero with Caption -->
+      <div class="landing-right-col">
+        <img src="assets/images/farmer_hero.jpg?v=20260907_2" alt="Indian Farmer in Field" class="hero-image-cover" />
+        <div class="hero-image-overlay">
+          <div class="hero-overlay-tag">01 / 06</div>
+          <div class="hero-overlay-headline" data-i18n="hero_banner_quote">From the field to your future.</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==================== 2. FARMER DASHBOARD VIEW ==================== -->
+  <main id="farmerDashboardView" class="dashboard-container hidden">
+    <!-- Top Action Toolbar with Back to Home & Logout Buttons -->
+    <div class="dashboard-header-toolbar">
+      <button class="btn btn-secondary btn-sm" onclick="window.showView ? window.showView('landingView') : showView('landingView')">
+        <span>←</span> <span data-i18n="back_to_home">Back to Home</span>
+      </button>
+      <div class="toolbar-greeting">
+        🌾 <span>Welcome, <strong id="farmerBarName">Farmer</strong>!</span>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="window.logoutUser ? window.logoutUser() : logoutUser()">
+        <span>🚪</span> <span data-i18n="nav_logout">Logout</span>
+      </button>
+    </div>
+
+    <!-- 4th-Day Expiry Alert Notification Banner -->
+    <div id="farmerExpiryAlertBanner" class="hidden expiry-alert-banner">
+      <div class="expiry-alert-icon">⚠️</div>
+      <div class="expiry-alert-content">
+        <h4 id="farmerExpiryAlertTitle">Crop Enrollment Expiry Warning (Day 4 Alert)</h4>
+        <p id="farmerExpiryAlertMsg">Your crop enrollment will expire and be disabled tomorrow! 1 day remaining in the 5-day freshness window.</p>
+      </div>
+      <button class="btn btn-sm btn-secondary font-bold" onclick="getElement('btnTabFarmerEnrolled').click()">View Crops →</button>
+    </div>
+
+    <!-- Visual Dashboard Hero Banner -->
+    <div class="dashboard-hero-banner">
+      <div class="hero-banner-image-wrap">
+        <img src="assets/images/farmer_hero.jpg?v=20260907_2" alt="Farmer in field" class="hero-banner-img" />
+        <div class="hero-banner-overlay"></div>
+      </div>
+      <div class="hero-banner-content">
+        <div class="hero-banner-badge">🌾 KISSAN-HUB PRODUCER PORTAL</div>
+        <h2><span data-i18n="hello">Hello</span>, <span id="farmerDashboardName">Farmer</span>!</h2>
+        <p>Direct farm-to-buyer trade • 5-day fresh crop listings • Live daily APMC mandi rates</p>
+        <div class="hero-banner-chips">
+          <span class="banner-chip">⚡ 5-Day Fresh Auto-Expiry</span>
+          <span class="banner-chip">📍 GPS Distance Matching</span>
+          <span class="banner-chip">📊 Today's Mandi Benchmark Active</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Farmer Nav Tabs -->
+    <div class="dashboard-nav-tabs">
+      <button id="btnTabFarmerRegCrop" class="tab-btn active" data-i18n="tab_farmer_register_crop" onclick="window.switchFarmerTab && window.switchFarmerTab('btnTabFarmerRegCrop', 'farmerTabContentRegCrop')">Register Crop</button>
+      <button id="btnTabFarmerEnrolled" class="tab-btn" data-i18n="tab_farmer_enrolled" onclick="window.switchFarmerTab && window.switchFarmerTab('btnTabFarmerEnrolled', 'farmerTabContentEnrolled')">Enrolled Crops</button>
+      <button id="btnTabFarmerSell" class="tab-btn" data-i18n="tab_farmer_sell" onclick="window.switchFarmerTab && window.switchFarmerTab('btnTabFarmerSell', 'farmerTabContentSell')">Sell My Crop</button>
+      <button id="btnTabFarmerPrice" class="tab-btn" data-i18n="tab_farmer_price" onclick="window.switchFarmerTab && window.switchFarmerTab('btnTabFarmerPrice', 'farmerTabContentPrice')">Live Mandi Prices</button>
+      <button id="btnTabFarmerProfile" class="tab-btn" data-i18n="tab_farmer_profile" onclick="window.switchFarmerTab && window.switchFarmerTab('btnTabFarmerProfile', 'farmerTabContentProfile')">My Profile</button>
+      <button id="btnTabFarmerMessages" class="tab-btn" data-i18n="tab_farmer_messages" onclick="window.switchFarmerTab && window.switchFarmerTab('btnTabFarmerMessages', 'farmerTabContentMessages')">💬 Messages & Calls <span class="comm-tab-unread hidden">●</span></button>
+      <button id="btnTabFarmerAi" class="tab-btn" data-i18n="tab_farmer_ai" onclick="window.switchFarmerTab && window.switchFarmerTab('btnTabFarmerAi', 'farmerTabContentAi')">AI Assistant</button>
+    </div>
+
+    <!-- Tab 1: Register Crop -->
+    <div id="farmerTabContentRegCrop" class="dashboard-panel">
+      <div class="panel-header">
+        <h3 data-i18n="reg_crop_heading">Register New Crop Listing</h3>
+        <p data-i18n="reg_crop_subheading">Listings remain active in the live marketplace for exactly 5 days before automatic expiry.</p>
+      </div>
+
+      <button type="button" id="btnCropRegGps" class="btn btn-gps" data-i18n="detect_location">Detect My GPS Location 📍</button>
+
+      <form id="farmerCropRegistrationForm">
+        <!-- AI Crop Photo Quality Assessment Section -->
+        <div class="crop-photo-upload-section mb-4">
+          <label><strong>📷 Crop Photo & AI Quality Assessment *</strong></label>
+          <p class="text-xs text-muted mb-2">Upload or capture a photo of your harvested lot. KISSAN-HUB AI will analyze grain uniformity, luster, and purity to automatically grade the produce.</p>
+          
+          <div class="photo-upload-row">
+            <div class="photo-upload-input-wrap">
+              <input type="file" id="cropRegPhotoInput" accept="image/*" class="form-control" />
+              <input type="hidden" id="cropRegPhotoData" />
+              <input type="hidden" id="cropRegAiGrade" value="A" />
+              <input type="hidden" id="cropRegAiScore" value="92.0" />
+              <input type="hidden" id="cropRegAiReport" value="" />
+            </div>
+            <button type="button" id="btnAiAnalyzePhoto" class="btn btn-secondary btn-sm" style="white-space: nowrap; font-weight: 700;">
+              🤖 Scan Quality with AI
+            </button>
+          </div>
+
+          <!-- Image Preview & AI Scan Result Box -->
+          <div id="cropPhotoPreviewBox" class="crop-photo-preview-box hidden mt-3">
+            <div class="preview-img-container">
+              <img id="cropPhotoPreviewImg" src="" alt="Crop Preview" class="crop-preview-thumbnail" />
+              <div id="aiScanningIndicator" class="ai-scanning-overlay hidden">
+                <div class="ai-scan-line"></div>
+                <span class="ai-scan-text">🤖 AI Scanning Crop Quality...</span>
+              </div>
+            </div>
+            <div id="aiAnalysisResultCard" class="ai-quality-card">
+              <div class="ai-quality-header">
+                <span class="ai-badge">🤖 AI Verified Quality</span>
+                <span id="aiQualityGradeBadge" class="quality-grade-badge">Grade A+</span>
+                <span id="aiQualityScoreBadge" class="quality-score-badge">94.0%</span>
+              </div>
+              <p id="aiQualityReportText" class="text-xs mt-2 text-dark font-medium"></p>
+              <div class="ai-metrics-pills mt-2">
+                <span class="metric-pill">Purity: <strong id="aiPurityVal">98.2%</strong></span>
+                <span class="metric-pill">Uniformity: <strong id="aiUniformityVal">95.0%</strong></span>
+                <span class="metric-pill">Moisture: <strong id="aiMoistureVal">Optimal</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label data-i18n="crop_type">Crop Type *</label>
+            <select id="cropRegType" class="form-control" required>
+              <option value="Food Grain">Food Grain</option>
+              <option value="Cereal">Cereal</option>
+              <option value="Pulse">Pulse</option>
+              <option value="Oilseed">Oilseed</option>
+              <option value="Vegetable">Vegetable</option>
+              <option value="Fruit">Fruit</option>
+              <option value="Commercial Crop">Commercial Crop</option>
+              <option value="Spice">Spice</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="crop_name">Crop Name *</label>
+            <select id="cropRegName" class="form-control" required>
+              <option value="Paddy">Paddy (వరి / धान)</option>
+              <option value="Maize">Maize (మొక్కజొన్న / मक्का)</option>
+              <option value="Cotton">Cotton (పత్తి / कपास)</option>
+              <option value="Chilli">Chilli (మిర్చి / मिर्च)</option>
+              <option value="Groundnut">Groundnut (వేరుశనగ / मूंगफली)</option>
+              <option value="Tomato">Tomato (టమోటా / टमाटर)</option>
+              <option value="Onion">Onion (ఉల్లిపాయ / प्याज)</option>
+              <option value="Wheat">Wheat (గోధుమ / गेहूं)</option>
+              <option value="Sugarcane">Sugarcane (చెరకు / गन्ना)</option>
+              <option value="Pulses">Pulses (పప్పు ధాన్యాలు / दालें)</option>
+              <option value="Soybean">Soybean (సోయాబీన్ / सोयाबीन)</option>
+              <option value="Mustard">Mustard (ఆవాలు / सरसों)</option>
+              <option value="Potato">Potato (బంగాళాదుంప / आलू)</option>
+              <option value="Turmeric">Turmeric (పసుపు / हल्दी)</option>
+              <option value="Bajra">Bajra (సజ్జలు / बाजरा)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="quality">Crop Quality Grade *</label>
+            <select id="cropRegQuality" class="form-control" required>
+              <option value="A">Grade A (Premium / Moisture &lt; 12%)</option>
+              <option value="B">Grade B (Standard Commercial)</option>
+              <option value="C">Grade C (Mixed Lot)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="available_quantity">Available Quantity (Quintals) *</label>
+            <input type="number" step="0.1" id="cropRegQuantity" class="form-control" placeholder="e.g. 50" required />
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="harvested_date">Harvested Date *</label>
+            <input type="date" id="cropRegHarvestedDate" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="phone">Phone Number</label>
+            <input type="tel" id="cropRegPhone" class="form-control" readonly />
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="aadhaar_number">Aadhaar Number (Optional)</label>
+            <input type="text" id="cropRegAadhaar" class="form-control" placeholder="12-digit Aadhaar" maxlength="12" />
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="gender">Gender</label>
+            <select id="cropRegGender" class="form-control">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg mt-2" data-i18n="btn_register_crop">Register Crop Listing</button>
+      </form>
+    </div>
+
+    <!-- Tab 2: Enrolled Crops -->
+    <div id="farmerTabContentEnrolled" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 data-i18n="enrolled_heading">My Enrolled Crop Listings</h3>
+        <p>Tracks your active produce. Expired crops are automatically excluded from buyer matching after 5 days.</p>
+      </div>
+      <div id="farmerEnrolledCropsList"></div>
+    </div>
+
+    <!-- Tab 3: Sell My Crop (Nearby Buyers) -->
+    <div id="farmerTabContentSell" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 data-i18n="sell_heading">Sell My Crop — Nearby Verified Buyers</h3>
+        <p data-i18n="sell_subheading">GPS-powered buyer matching. Verified buyers sorted nearest to your farm location.</p>
+      </div>
+
+      <form id="farmerSellSearchForm" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <select id="farmerSellCropFilter" class="form-control" style="max-width: 300px;">
+            <option value="" data-i18n="all_crops">-- All Crops --</option>
+            <option value="Paddy">Paddy</option>
+            <option value="Maize">Maize</option>
+            <option value="Cotton">Cotton</option>
+            <option value="Chilli">Chilli</option>
+            <option value="Groundnut">Groundnut</option>
+            <option value="Tomato">Tomato</option>
+            <option value="Onion">Onion</option>
+            <option value="Wheat">Wheat</option>
+            <option value="Soybean">Soybean</option>
+            <option value="Mustard">Mustard</option>
+          </select>
+          <button type="submit" class="btn btn-primary" data-i18n="btn_find_nearby_buyers">Find Nearby Buyers</button>
+        </div>
+      </form>
+
+      <div id="farmerNearbyBuyersList"></div>
+    </div>
+
+    <!-- Tab 4: Live Government Mandi Benchmark Prices -->
+    <div id="farmerTabContentPrice" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 style="display: flex; align-items: center; gap: 0.5rem;">
+          🏛️ <span>LIVE GOVERNMENT MANDI PRICES</span>
+        </h3>
+        <p>Real-time daily APMC market prices fetched directly from the official <strong>Government of India Open Government Data (OGD) Platform / data.gov.in</strong>.</p>
+      </div>
+
+      <!-- Nearby Markets Card -->
+      <div id="farmerNearbyMandisContainer"></div>
+
+      <!-- Government Mandi Filter Bar -->
+      <div class="mandi-filter-bar">
+        <form id="farmerGovMandiSearchForm">
+          <div class="mandi-filter-grid">
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">Crop / Commodity</label>
+              <select id="farmerMandiCropSelect" class="form-control gov-mandi-crop-select">
+                <option value="">-- All Commodities --</option>
+                <option value="Tomato">Tomato</option>
+                <option value="Paddy">Paddy (Dhan)</option>
+                <option value="Maize">Maize</option>
+                <option value="Cotton">Cotton</option>
+                <option value="Chilli">Chilli Red</option>
+                <option value="Groundnut">Groundnut</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Onion">Onion</option>
+                <option value="Potato">Potato</option>
+                <option value="Soyabean">Soyabean</option>
+                <option value="Mustard">Mustard</option>
+                <option value="Turmeric">Turmeric</option>
+                <option value="Bajra">Bajra</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">State</label>
+              <select id="farmerMandiStateSelect" class="form-control gov-mandi-state-select">
+                <option value="">-- All States --</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Gujarat">Gujarat</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">District (Optional)</label>
+              <input type="text" id="farmerMandiDistrictInput" class="form-control" placeholder="e.g. Kurnool, Warangal..." />
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">Market / Mandi (Optional)</label>
+              <input type="text" id="farmerMandiMarketInput" class="form-control" placeholder="e.g. Adoni, Bowenpally..." />
+            </div>
+
+            <div class="mandi-filter-actions">
+              <button type="submit" class="btn btn-primary btn-block font-bold">
+                🔍 Search Prices
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Freshness & Attribution Banner -->
+      <div id="farmerGovMandiMeta"></div>
+
+      <!-- Government Mandi Results (Comparison Table & Cards) -->
+      <div id="farmerGovMandiResults"></div>
+    </div>
+
+    <!-- Tab 5: Farmer Profile -->
+    <div id="farmerTabContentProfile" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 data-i18n="tab_farmer_profile">My Profile</h3>
+        <p>Your registered farmer credentials and location details.</p>
+      </div>
+      <div class="contact-details-box" style="max-width: 500px;">
+        <div class="info-line"><strong><span data-i18n="full_name">Full Name</span>:</strong> <span id="profFarmerName">-</span></div>
+        <div class="info-line"><strong><span data-i18n="phone">Phone Number</span>:</strong> <span id="profFarmerPhone">-</span></div>
+        <div class="info-line"><strong><span data-i18n="state">State</span>:</strong> <span id="profFarmerState">-</span></div>
+        <div class="info-line"><strong><span data-i18n="district">District</span>:</strong> <span id="profFarmerDistrict">-</span></div>
+        <div class="info-line"><strong><span data-i18n="mandal">Mandal</span>:</strong> <span id="profFarmerMandal">-</span></div>
+        <div class="info-line"><strong><span data-i18n="gender">Gender</span>:</strong> <span id="profFarmerGender">-</span></div>
+        <div class="info-line"><strong><span data-i18n="aadhaar_number">Aadhaar</span>:</strong> <span id="profFarmerAadhaar">-</span></div>
+        <div class="mt-4">
+          <button id="btnOpenFarmerEditProfile" class="btn btn-secondary" data-i18n="edit">Edit Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 6: Farmer AI Assistant -->
+    <div id="farmerTabContentAi" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 data-i18n="ai_title">KISSAN-HUB AI Agricultural Assistant</h3>
+        <p data-i18n="ai_greeting">Ask me about daily government mandi prices, buyers near you, crop quality guidelines, or market trends.</p>
+      </div>
+
+      <div class="ai-chat-container">
+        <div id="farmerAiChatHistory" class="ai-chat-history">
+          <div class="chat-bubble chat-bubble-bot" data-i18n="ai_greeting">
+            Hello! Ask me about daily government mandi prices, buyers near you, crop quality guidelines, or market trends.
+          </div>
+        </div>
+        <form id="farmerAiChatForm" class="ai-chat-input-bar">
+          <input type="text" id="farmerAiMessageInput" class="form-control" placeholder="Ask in your preferred language..." data-i18n-placeholder="ai_placeholder" autocomplete="off" />
+          <button type="button" id="farmerAiVoiceBtn" class="btn btn-secondary btn-mic" title="Voice Assistant">🎤</button>
+          <button type="submit" class="btn btn-primary" data-i18n="submit">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tab 7: Messages & Calls with Buyers -->
+    <div id="farmerTabContentMessages" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 style="display:flex; align-items:center; gap:0.5rem;">
+          <span>💬</span> <span>Direct Messages & Calls with Verified Buyers</span>
+        </h3>
+        <p>1-to-1 secure private communication. Real-time text chat, WebRTC voice & video calling. Phone numbers remain completely hidden.</p>
+      </div>
+
+      <div class="comm-container">
+        <div class="comm-sidebar">
+          <div class="comm-sidebar-header">
+            <h4>Verified Buyers</h4>
+            <button class="btn btn-secondary btn-sm" onclick="loadConversations()" title="Refresh conversations">🔄</button>
+          </div>
+          <div id="farmerConversationsList" class="comm-conv-list"></div>
+        </div>
+
+        <div class="comm-main">
+          <div id="farmerChatPlaceholder" class="comm-placeholder">
+            <div class="comm-placeholder-icon">💬</div>
+            <h4>Select a Conversation</h4>
+            <p class="text-muted text-xs">Choose a buyer from the left or click "Chat with Buyer" on any demand lot to start a private real-time conversation.</p>
+          </div>
+
+          <div id="farmerChatActiveArea" class="comm-active-chat hidden">
+            <div class="comm-chat-header">
+              <div class="comm-partner-info">
+                <div class="comm-avatar">🏢</div>
+                <div>
+                  <h4 id="farmerChatPartnerName" class="comm-partner-title">Buyer Name</h4>
+                  <div class="comm-partner-sub">
+                    <span id="farmerChatPartnerStatusDot" class="status-dot offline"></span>
+                    <span id="farmerChatPartnerStatusText" class="text-xs text-muted">Offline</span>
+                    <span id="farmerChatPartnerLocation" class="comm-partner-loc text-xs text-muted"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="comm-call-actions">
+                <button id="farmerBtnVoiceCall" class="btn btn-secondary btn-sm btn-call-trigger" title="Start Secure Voice Call">
+                  📞 Voice Call
+                </button>
+                <button id="farmerBtnVideoCall" class="btn btn-primary btn-sm btn-call-trigger" title="Start Video Call">
+                  📹 Video Call
+                </button>
+              </div>
+            </div>
+
+            <div id="farmerChatMessagesContainer" class="comm-chat-messages"></div>
+            <div id="farmerChatTypingIndicator" class="comm-typing-bar hidden">
+              <span>✍️ Buyer is typing...</span>
+            </div>
+
+            <form id="farmerChatForm" class="comm-chat-input-bar" onsubmit="return window.handleSendChatMessage(event, 'farmer')">
+              <input type="text" id="farmerChatTextInput" class="form-control" placeholder="Type your secure message..." autocomplete="off" oninput="window.handleChatInputTyping('farmer')" />
+              <button type="submit" class="btn btn-primary font-bold">Send ➤</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== 3. BUYER DASHBOARD VIEW ==================== -->
+  <main id="buyerDashboardView" class="dashboard-container hidden">
+    <!-- Top Action Toolbar with Back to Home & Logout Buttons -->
+    <div class="dashboard-header-toolbar">
+      <button class="btn btn-secondary btn-sm" onclick="window.showView ? window.showView('landingView') : showView('landingView')">
+        <span>←</span> <span data-i18n="back_to_home">Back to Home</span>
+      </button>
+      <div class="toolbar-greeting">
+        🏪 <span>Welcome, <strong id="buyerBarName">Buyer</strong>!</span>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="window.logoutUser ? window.logoutUser() : logoutUser()">
+        <span>🚪</span> <span data-i18n="nav_logout">Logout</span>
+      </button>
+    </div>
+
+    <!-- Visual Dashboard Hero Banner -->
+    <div class="dashboard-hero-banner buyer-theme">
+      <div class="hero-banner-image-wrap">
+        <img src="assets/images/farmer_hero.jpg?v=20260907_2" alt="Agricultural harvest" class="hero-banner-img" />
+        <div class="hero-banner-overlay"></div>
+      </div>
+      <div class="hero-banner-content">
+        <div class="hero-banner-badge">🏪 KISSAN-HUB PROCUREMENT PORTAL</div>
+        <h2><span data-i18n="hello">Hello</span>, <span id="buyerDashboardName">Buyer</span>!</h2>
+        <p>Procure verified farm produce • Zero intermediaries • Real-time APMC price benchmarks</p>
+        <div class="hero-banner-chips">
+          <span class="banner-chip">🌾 100% Direct From Farmers</span>
+          <span class="banner-chip">🛡️ Verified Producer Listings</span>
+          <span class="banner-chip">📈 Daily Government Mandi Rates</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buyer Nav Tabs -->
+    <div class="dashboard-nav-tabs">
+      <button id="btnTabBuyerMarket" class="tab-btn active" data-i18n="tab_buyer_market" onclick="window.switchBuyerTab && window.switchBuyerTab('btnTabBuyerMarket', 'buyerTabContentMarket')">My Market Profile</button>
+      <button id="btnTabBuyerPostReq" class="tab-btn" data-i18n="tab_buyer_post_req" onclick="window.switchBuyerTab && window.switchBuyerTab('btnTabBuyerPostReq', 'buyerTabContentPostReq')">Post Requirement</button>
+      <button id="btnTabBuyerMyReqs" class="tab-btn" data-i18n="tab_buyer_my_reqs" onclick="window.switchBuyerTab && window.switchBuyerTab('btnTabBuyerMyReqs', 'buyerTabContentMyReqs')">Active Requirements</button>
+      <button id="btnTabBuyerFindFarmers" class="tab-btn" data-i18n="tab_buyer_find_farmers" onclick="window.switchBuyerTab && window.switchBuyerTab('btnTabBuyerFindFarmers', 'buyerTabContentFindFarmers')">Find Farmers / Crops</button>
+      <button id="btnTabBuyerPrice" class="tab-btn" data-i18n="tab_buyer_price" onclick="window.switchBuyerTab && window.switchBuyerTab('btnTabBuyerPrice', 'buyerTabContentPrice')">Live Mandi Prices</button>
+      <button id="btnTabBuyerMessages" class="tab-btn" data-i18n="tab_buyer_messages" onclick="window.switchBuyerTab && window.switchBuyerTab('btnTabBuyerMessages', 'buyerTabContentMessages')">💬 Messages & Calls <span class="comm-tab-unread hidden">●</span></button>
+      <button id="btnTabBuyerAi" class="tab-btn" data-i18n="tab_buyer_ai" onclick="window.switchBuyerTab && window.switchBuyerTab('btnTabBuyerAi', 'buyerTabContentAi')">AI Assistant</button>
+    </div>
+
+    <!-- Tab 1: Market Profile -->
+    <div id="buyerTabContentMarket" class="dashboard-panel">
+      <div class="panel-header">
+        <h3 data-i18n="tab_buyer_market">My Market Profile</h3>
+        <p>Your business procurement details visible to verified sellers.</p>
+      </div>
+      <div class="contact-details-box" style="max-width: 500px;">
+        <div class="info-line"><strong><span data-i18n="market_name">Market / Business Name</span>:</strong> <span id="profBuyerMarketName">-</span></div>
+        <div class="info-line"><strong><span data-i18n="full_name">Authorized Person</span>:</strong> <span id="profBuyerFullName">-</span></div>
+        <div class="info-line"><strong><span data-i18n="phone">Phone Number</span>:</strong> <span id="profBuyerPhone">-</span></div>
+        <div class="info-line"><strong><span data-i18n="state">State</span>:</strong> <span id="profBuyerState">-</span></div>
+        <div class="info-line"><strong><span data-i18n="district">District</span>:</strong> <span id="profBuyerDistrict">-</span></div>
+        <div class="info-line"><strong><span data-i18n="mandal">Mandal</span>:</strong> <span id="profBuyerMandal">-</span></div>
+        <div class="mt-4">
+          <button id="btnOpenBuyerEditProfile" class="btn btn-secondary" data-i18n="edit">Edit Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Post Crop Requirement -->
+    <div id="buyerTabContentPostReq" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 data-i18n="post_req_heading">Post Crop Procurement Requirement</h3>
+        <p>Publish your crop demands to match with nearby registered farmers.</p>
+      </div>
+
+      <form id="buyerPostRequirementForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label data-i18n="crop_name">Crop Name *</label>
+            <select id="buyerReqCropName" class="form-control" required>
+              <option value="Paddy">Paddy (వరి / धान)</option>
+              <option value="Maize">Maize (మొక్కజొన్న / मक्का)</option>
+              <option value="Cotton">Cotton (పత్తి / कपास)</option>
+              <option value="Chilli">Chilli (మిర్చి / मिर्च)</option>
+              <option value="Groundnut">Groundnut (వేరుశనగ / मूंगफली)</option>
+              <option value="Tomato">Tomato (టమోటా / टमाटर)</option>
+              <option value="Onion">Onion (ఉల్లిపాయ / प्याज)</option>
+              <option value="Wheat">Wheat (గోధుమ / गेहूं)</option>
+              <option value="Sugarcane">Sugarcane (చెరకు / गन्ना)</option>
+              <option value="Pulses">Pulses (పప్పు ధాన్యాలు / दालें)</option>
+              <option value="Soybean">Soybean (సోయాబీన్ / सोयाबीन)</option>
+              <option value="Mustard">Mustard (ఆవాలు / सरसों)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="quantity">Required Quantity (Quintals) *</label>
+            <input type="number" step="1" id="buyerReqQuantity" class="form-control" placeholder="e.g. 100" required />
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="quality">Quality Required *</label>
+            <select id="buyerReqQuality" class="form-control" required>
+              <option value="A">Grade A (Premium)</option>
+              <option value="B">Grade B (Standard Commercial)</option>
+              <option value="C">Grade C (Any)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="buying_price">Today's Buying Price (₹/Quintal) *</label>
+            <input type="number" step="1" id="buyerReqPrice" class="form-control" placeholder="e.g. 2350" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg mt-2" data-i18n="btn_post_req">Publish Requirement</button>
+      </form>
+    </div>
+
+    <!-- Tab 3: Active Requirements -->
+    <div id="buyerTabContentMyReqs" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 data-i18n="active_reqs_heading">My Active Crop Requirements</h3>
+        <p>Manage your published procurement requirements.</p>
+      </div>
+      <div id="buyerActiveReqsList"></div>
+    </div>
+
+    <!-- Tab 4: Search Available Farmers / Crops -->
+    <div id="buyerTabContentFindFarmers" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 data-i18n="search_farmers_heading">Browse Fresh Available Produce</h3>
+        <p data-i18n="search_farmers_subheading">Active farmer listings within 5-day freshness window sorted by GPS distance.</p>
+      </div>
+
+      <form id="buyerSearchFarmersForm" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+          <select id="buyerSearchCropFilter" class="form-control" style="max-width: 250px;">
+            <option value="" data-i18n="all_crops">-- All Crops --</option>
+            <option value="Paddy">Paddy</option>
+            <option value="Maize">Maize</option>
+            <option value="Cotton">Cotton</option>
+            <option value="Chilli">Chilli</option>
+            <option value="Groundnut">Groundnut</option>
+            <option value="Tomato">Tomato</option>
+            <option value="Onion">Onion</option>
+            <option value="Wheat">Wheat</option>
+            <option value="Soybean">Soybean</option>
+          </select>
+          <select id="buyerSearchRadiusFilter" class="form-control" style="max-width: 200px;">
+            <option value="50" selected>📍 Within 50 km (Nearby)</option>
+            <option value="25">📍 Within 25 km</option>
+            <option value="100">📍 Within 100 km</option>
+            <option value="">🌐 All Distances</option>
+          </select>
+          <button type="submit" class="btn btn-primary" data-i18n="btn_search_farmers">Search Available Produce</button>
+        </div>
+      </form>
+
+      <div id="buyerAvailableFarmersList"></div>
+    </div>
+
+    <!-- Tab 5: Buyer Market Intelligence & Government Mandi Prices -->
+    <div id="buyerTabContentPrice" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 style="display: flex; align-items: center; gap: 0.5rem;">
+          🏛️ <span>BUYER MARKET INTELLIGENCE</span>
+        </h3>
+        <p>Live APMC mandi benchmark prices from the official <strong>Government of India Open Government Data (OGD) Platform / data.gov.in</strong> compared against active buyer procurement offers.</p>
+      </div>
+
+      <!-- Comparative Intelligence Widget: Government Price vs Verified Buyer Offers -->
+      <div id="buyerMandiVsDemandWidget"></div>
+
+      <!-- Government Mandi Filter Bar for Buyers -->
+      <div class="mandi-filter-bar">
+        <form id="buyerGovMandiSearchForm">
+          <div class="mandi-filter-grid">
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">Commodity</label>
+              <select id="buyerMandiCropSelect" class="form-control gov-mandi-crop-select">
+                <option value="">-- All Commodities --</option>
+                <option value="Tomato">Tomato</option>
+                <option value="Paddy">Paddy (Dhan)</option>
+                <option value="Maize">Maize</option>
+                <option value="Cotton">Cotton</option>
+                <option value="Chilli">Chilli Red</option>
+                <option value="Groundnut">Groundnut</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Onion">Onion</option>
+                <option value="Potato">Potato</option>
+                <option value="Soyabean">Soyabean</option>
+                <option value="Mustard">Mustard</option>
+                <option value="Turmeric">Turmeric</option>
+                <option value="Bajra">Bajra</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">State</label>
+              <select id="buyerMandiStateSelect" class="form-control gov-mandi-state-select">
+                <option value="">-- All States --</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Gujarat">Gujarat</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">District (Optional)</label>
+              <input type="text" id="buyerMandiDistrictInput" class="form-control" placeholder="e.g. Kurnool, Warangal..." />
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">Market / Mandi (Optional)</label>
+              <input type="text" id="buyerMandiMarketInput" class="form-control" placeholder="e.g. Adoni, Bowenpally..." />
+            </div>
+
+            <div class="mandi-filter-actions">
+              <button type="submit" class="btn btn-primary btn-block font-bold">
+                🔍 Check Mandi Rates
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Freshness & Attribution Banner -->
+      <div id="buyerGovMandiMeta"></div>
+
+      <!-- Government Mandi Results (Comparison Table & Cards) -->
+      <div id="buyerGovMandiResults"></div>
+    </div>
+
+    <!-- Tab 6: Buyer AI Assistant -->
+    <div id="buyerTabContentAi" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 data-i18n="ai_title">KISSAN-HUB AI Procurement Assistant</h3>
+        <p>Ask about available lots, registered farmers, market rates, or crop arrivals.</p>
+      </div>
+
+      <div class="ai-chat-container">
+        <div id="buyerAiChatHistory" class="ai-chat-history">
+          <div class="chat-bubble chat-bubble-bot">
+            Hello! I am your KISSAN-HUB Procurement AI. Ask me: "What crops are available?", "Which farmers are selling Paddy?", or check mandi benchmark rates.
+          </div>
+        </div>
+        <form id="buyerAiChatForm" class="ai-chat-input-bar">
+          <input type="text" id="buyerAiMessageInput" class="form-control" placeholder="Ask in your preferred language..." data-i18n-placeholder="ai_placeholder" autocomplete="off" />
+          <button type="button" id="buyerAiVoiceBtn" class="btn btn-secondary btn-mic" title="Voice Assistant">🎤</button>
+          <button type="submit" class="btn btn-primary" data-i18n="submit">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tab 7: Messages & Calls with Farmers -->
+    <div id="buyerTabContentMessages" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3 style="display:flex; align-items:center; gap:0.5rem;">
+          <span>💬</span> <span>Direct Messages & Calls with Farmers</span>
+        </h3>
+        <p>1-to-1 secure private communication. Real-time text chat, WebRTC voice & video calling. Direct producer connection.</p>
+      </div>
+
+      <div class="comm-container">
+        <div class="comm-sidebar">
+          <div class="comm-sidebar-header">
+            <h4>Verified Farmers</h4>
+            <button class="btn btn-secondary btn-sm" onclick="loadConversations()" title="Refresh conversations">🔄</button>
+          </div>
+          <div id="buyerConversationsList" class="comm-conv-list"></div>
+        </div>
+
+        <div class="comm-main">
+          <div id="buyerChatPlaceholder" class="comm-placeholder">
+            <div class="comm-placeholder-icon">💬</div>
+            <h4>Select a Conversation</h4>
+            <p class="text-muted text-xs">Choose a farmer from the left or click "Chat with Farmer" on any crop listing to start a private real-time conversation.</p>
+          </div>
+
+          <div id="buyerChatActiveArea" class="comm-active-chat hidden">
+            <div class="comm-chat-header">
+              <div class="comm-partner-info">
+                <div class="comm-avatar">🌾</div>
+                <div>
+                  <h4 id="buyerChatPartnerName" class="comm-partner-title">Farmer Name</h4>
+                  <div class="comm-partner-sub">
+                    <span id="buyerChatPartnerStatusDot" class="status-dot offline"></span>
+                    <span id="buyerChatPartnerStatusText" class="text-xs text-muted">Offline</span>
+                    <span id="buyerChatPartnerLocation" class="comm-partner-loc text-xs text-muted"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="comm-call-actions">
+                <button id="buyerBtnVoiceCall" class="btn btn-secondary btn-sm btn-call-trigger" title="Start Secure Voice Call">
+                  📞 Voice Call
+                </button>
+                <button id="buyerBtnVideoCall" class="btn btn-primary btn-sm btn-call-trigger" title="Start Video Call">
+                  📹 Video Call
+                </button>
+              </div>
+            </div>
+
+            <div id="buyerChatMessagesContainer" class="comm-chat-messages"></div>
+            <div id="buyerChatTypingIndicator" class="comm-typing-bar hidden">
+              <span>✍️ Farmer is typing...</span>
+            </div>
+
+            <form id="buyerChatForm" class="comm-chat-input-bar" onsubmit="return window.handleSendChatMessage(event, 'buyer')">
+              <input type="text" id="buyerChatTextInput" class="form-control" placeholder="Type your secure message..." autocomplete="off" oninput="window.handleChatInputTyping('buyer')" />
+              <button type="submit" class="btn btn-primary font-bold">Send ➤</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. FARMER LOGIN MODAL -->
+  <div id="farmerLoginModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 data-i18n="title_farmer_login">Farmer Login</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Cross-role hint banner -->
+        <div id="farmerCrossRoleBanner" class="hidden mb-3 p-3 bg-amber-50 border border-amber-300 rounded-lg text-sm text-amber-800">
+          <div id="farmerCrossRoleMsg"></div>
+          <button type="button" id="btnSwitchToBuyerLogin" class="btn btn-secondary btn-sm mt-2 w-full" style="font-weight: 600;">Switch to Buyer Login 🏪</button>
+        </div>
+
+        <form id="farmerLoginForm" onsubmit="return window.handleFarmerLoginSubmit(event)">
+          <div class="form-group">
+            <label data-i18n="phone">Phone Number (10 digits) *</label>
+            <input type="tel" id="farmerLoginPhone" class="form-control" placeholder="9876543210" maxlength="15" required />
+            <div class="form-hint">Enter your 10-digit registered Indian phone number</div>
+          </div>
+
+          <div class="form-group">
+            <label>Password / OTP *</label>
+            <input type="password" id="farmerLoginPassword" class="form-control" value="123456" placeholder="123456" required />
+            <div class="form-hint" style="color: var(--primary); font-weight: 600;">Universal Password for all phone numbers: 123456</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <button type="button" id="btnDemoFarmerFill" class="btn btn-secondary btn-sm">Use Demo (9123456780 / 123456)</button>
+            <button type="button" id="btnFarmerDirectReg" class="btn btn-secondary btn-sm" style="color: var(--success); font-weight: 700;">New Farmer? Register</button>
+          </div>
+
+          <button type="submit" id="btnFarmerLoginSubmit" class="btn btn-primary btn-block btn-lg" onclick="window.handleFarmerLoginSubmit(event)" data-i18n="btn_farmer_login">Login to Farmer Dashboard</button>
+          <button type="button" class="btn btn-secondary btn-block mt-2" onclick="closeModal('farmerLoginModal')">← Back to Home</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. FARMER REGISTRATION MODAL -->
+  <div id="farmerRegModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 data-i18n="title_farmer_reg">Farmer Registration</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="farmerRegFormContainer">
+          <button type="button" id="btnFarmerRegGps" class="btn btn-gps" data-i18n="detect_location">Detect My GPS Location 📍</button>
+          <form id="farmerRegisterForm">
+            <div class="form-group">
+              <label data-i18n="full_name">Full Name *</label>
+              <input type="text" id="farmerRegName" class="form-control" placeholder="e.g. Ramesh Kumar" required />
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="state">State *</label>
+              <select id="farmerRegState" class="form-control" required></select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="district">District *</label>
+              <select id="farmerRegDistrict" class="form-control" required></select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="mandal">Mandal / Tehsil *</label>
+              <select id="farmerRegMandal" class="form-control" required></select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="phone">Phone Number (10 digits) *</label>
+              <input type="tel" id="farmerRegPhone" class="form-control" placeholder="9876543210" maxlength="10" required />
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="gender">Gender</label>
+              <select id="farmerRegGender" class="form-control">
+                <option value="Male" data-i18n="male">Male</option>
+                <option value="Female" data-i18n="female">Female</option>
+                <option value="Other" data-i18n="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="aadhaar_number">Aadhaar Number (Optional)</label>
+              <input type="text" id="farmerRegAadhaar" class="form-control" placeholder="12-digit Aadhaar" maxlength="12" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" data-i18n="continue">Continue to OTP</button>
+            <button type="button" class="btn btn-secondary btn-block mt-2" onclick="closeModal('farmerRegModal'); openModal('farmerLoginModal');">← Back to Login</button>
+          </form>
+        </div>
+
+        <div id="farmerRegOtpContainer" class="hidden">
+          <form id="farmerRegOtpForm">
+            <p class="text-sm text-muted mb-2">Verifying phone: <strong id="farmerRegOtpPhoneDisplay"></strong></p>
+            <div class="form-group">
+              <label data-i18n="enter_otp">Enter 6-digit OTP</label>
+              <input type="text" id="farmerRegOtp" class="form-control" placeholder="123456" maxlength="6" required />
+              <div class="form-hint" data-i18n="demo_otp_hint">Demo OTP is 123456</div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" data-i18n="verify_otp">Verify & Register</button>
+            <button type="button" class="btn btn-secondary btn-block mt-2" onclick="getElement('farmerRegFormContainer').classList.remove('hidden'); getElement('farmerRegOtpContainer').classList.add('hidden');">← Back to Edit Details</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. BUYER LOGIN MODAL (PASSWORD & OTP DUAL-MODE) -->
+  <div id="buyerLoginModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 data-i18n="title_buyer_login">Buyer Login</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Cross-role hint banner -->
+        <div id="buyerCrossRoleBanner" class="hidden mb-3 p-3 bg-amber-50 border border-amber-300 rounded-lg text-sm text-amber-800">
+          <div id="buyerCrossRoleMsg"></div>
+          <button type="button" id="btnSwitchToFarmerLogin" class="btn btn-secondary btn-sm mt-2 w-full" style="font-weight: 600;">Switch to Farmer Login 🌾</button>
+        </div>
+
+        <!-- Mode Toggle Tabs -->
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; background: #f1f5f9; padding: 4px; border-radius: 8px;">
+          <button type="button" id="btnBuyerTabPwd" class="btn btn-sm" style="flex: 1; background: #ffffff; color: var(--primary); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">🔑 Password Login</button>
+          <button type="button" id="btnBuyerTabOtp" class="btn btn-sm" style="flex: 1; background: transparent; color: var(--text-muted); font-weight: 600;">📱 Login via OTP (123456)</button>
+        </div>
+
+        <!-- Tab 1: Password Login -->
+        <form id="buyerLoginForm">
+          <div class="form-group">
+            <label data-i18n="phone">Registered Phone Number (10 digits) *</label>
+            <input type="tel" id="buyerLoginPhone" class="form-control" placeholder="9876543210" maxlength="10" required />
+          </div>
+          <div class="form-group">
+            <label data-i18n="password">Password *</label>
+            <input type="password" id="buyerLoginPassword" class="form-control" placeholder="••••••••" required />
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <button type="button" id="btnDemoBuyerFill" class="btn btn-secondary btn-sm">Use Demo (9876543210 / Buyer@123)</button>
+            <a href="#" id="linkBuyerForgotPassword" class="text-xs text-muted" data-i18n="forgot_password">Forgot Password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg" data-i18n="btn_buyer_login">Login to Buyer Dashboard</button>
+          <button type="button" class="btn btn-secondary btn-block mt-2" onclick="closeModal('buyerLoginModal')">← Back to Home</button>
+        </form>
+
+        <!-- Tab 2: OTP Login -->
+        <form id="buyerOtpLoginForm" class="hidden">
+          <div class="form-group">
+            <label data-i18n="phone">Registered Phone Number (10 digits) *</label>
+            <input type="tel" id="buyerOtpLoginPhone" class="form-control" placeholder="9876543210" maxlength="10" required />
+          </div>
+          <div class="form-group">
+            <label data-i18n="enter_otp">Enter 6-digit OTP *</label>
+            <input type="text" id="buyerOtpLoginOtp" class="form-control" placeholder="123456" maxlength="6" value="123456" required />
+            <div class="form-hint" data-i18n="demo_otp_hint">Demo OTP is 123456</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">Verify OTP & Login</button>
+          <button type="button" class="btn btn-secondary btn-block mt-2" onclick="closeModal('buyerLoginModal')">← Back to Home</button>
+        </form>
+
+        <div class="text-center mt-4">
+          <span class="text-sm text-muted">Don't have an account? </span>
+          <a href="#" id="linkBuyerToReg" class="text-sm font-bold text-success" data-i18n="register_now">Register Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. BUYER REGISTRATION MODAL (STREAMLINED) -->
+  <div id="buyerRegModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 data-i18n="title_buyer_reg">Buyer Registration</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="buyerRegStep1">
+          <button type="button" id="btnBuyerRegGps" class="btn btn-gps" data-i18n="detect_location">Detect My GPS Location 📍</button>
+          <form id="buyerRegisterForm">
+            <div class="form-group">
+              <label data-i18n="market_name">Market / Company Name *</label>
+              <input type="text" id="buyerRegMarketName" class="form-control" placeholder="e.g. Kisan Agro Procurement Ltd" required />
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="full_name">Authorized Representative *</label>
+              <input type="text" id="buyerRegFullName" class="form-control" placeholder="e.g. Suresh Patel" required />
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="state">State *</label>
+              <select id="buyerRegState" class="form-control" required></select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="district">District *</label>
+              <select id="buyerRegDistrict" class="form-control" required></select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="mandal">Mandal / Tehsil *</label>
+              <select id="buyerRegMandal" class="form-control" required></select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="phone">Phone Number (10 digits) *</label>
+              <input type="tel" id="buyerRegPhone" class="form-control" placeholder="9876543210" maxlength="10" required />
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="new_password">Password (min 6 characters) *</label>
+              <input type="password" id="buyerRegPassword" class="form-control" placeholder="Create a secure password" minlength="6" required />
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="confirm_password">Confirm Password *</label>
+              <input type="password" id="buyerRegConfirmPassword" class="form-control" placeholder="Re-enter password" minlength="6" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" data-i18n="continue">Continue to OTP</button>
+            <button type="button" class="btn btn-secondary btn-block mt-2" onclick="closeModal('buyerRegModal'); openModal('buyerLoginModal');">← Back to Login</button>
+          </form>
+        </div>
+
+        <div id="buyerRegStep2Otp" class="hidden">
+          <form id="buyerRegOtpForm">
+            <p class="text-sm text-muted mb-2">Verifying phone: <strong id="buyerRegOtpPhoneDisplay"></strong></p>
+            <div class="form-group">
+              <label data-i18n="enter_otp">Enter 6-digit OTP</label>
+              <input type="text" id="buyerRegOtp" class="form-control" placeholder="123456" maxlength="6" value="123456" required />
+              <div class="form-hint" data-i18n="demo_otp_hint">Demo OTP is 123456</div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" data-i18n="verify_otp">Verify & Complete Registration</button>
+            <button type="button" class="btn btn-secondary btn-block mt-2" onclick="getElement('buyerRegStep1').classList.remove('hidden'); getElement('buyerRegStep2Otp').classList.add('hidden');">← Back to Edit Details</button>
+          </form>
+  <!-- 5. BUYER FORGOT PASSWORD MODAL -->
+  <div id="buyerForgotModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 data-i18n="title_forgot_pwd">Forgot Password</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="buyerForgotStepPhone">
+          <form id="buyerForgotPhoneForm">
+            <div class="form-group">
+              <label data-i18n="phone">Enter Registered Phone Number</label>
+              <input type="tel" id="buyerForgotPhone" class="form-control" placeholder="9876543210" maxlength="10" required />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" data-i18n="continue">Send OTP</button>
+            <button type="button" class="btn btn-secondary btn-block mt-2" onclick="closeModal('buyerForgotModal'); openModal('buyerLoginModal');">← Back to Login</button>
+          </form>
+        </div>
+
+        <div id="buyerForgotStepReset" class="hidden">
+          <form id="buyerForgotResetForm">
+            <p class="text-sm text-muted mb-2">Resetting password for: <strong id="buyerForgotPhoneDisplay"></strong></p>
+            <div class="form-group">
+              <label data-i18n="enter_otp">Enter 6-digit OTP</label>
+              <input type="text" id="buyerForgotOtp" class="form-control" placeholder="123456" maxlength="6" required />
+              <div class="form-hint" data-i18n="demo_otp_hint">Demo OTP is 123456</div>
+            </div>
+            <div class="form-group">
+              <label data-i18n="new_password">New Password</label>
+              <input type="password" id="buyerForgotNewPassword" class="form-control" minlength="6" required />
+            </div>
+            <div class="form-group">
+              <label data-i18n="confirm_password">Confirm Password</label>
+              <input type="password" id="buyerForgotConfirmPassword" class="form-control" minlength="6" required />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" data-i18n="save">Reset Password</button>
+            <button type="button" class="btn btn-secondary btn-block mt-2" onclick="getElement('buyerForgotStepPhone').classList.remove('hidden'); getElement('buyerForgotStepReset').classList.add('hidden');">← Back to Phone Number</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. EDIT PROFILE & DETAIL MODALS -->
+  <div id="farmerEditProfileModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Farmer Profile</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="farmerEditProfileForm">
+          <div class="form-group">
+            <label data-i18n="full_name">Full Name</label>
+            <input type="text" id="farmerEditName" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label data-i18n="state">State</label>
+            <select id="farmerEditState" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="district">District</label>
+            <select id="farmerEditDistrict" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="mandal">Mandal</label>
+            <select id="farmerEditMandal" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="gender">Gender</label>
+            <select id="farmerEditGender" class="form-control">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" data-i18n="save">Save Changes</button>
+          <button type="button" class="btn btn-secondary btn-block mt-2" onclick="closeModal('farmerEditProfileModal')">← Cancel / Back</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="buyerEditProfileModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Buyer Profile</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="buyerEditProfileForm">
+          <div class="form-group">
+            <label data-i18n="market_name">Market / Company Name</label>
+            <input type="text" id="buyerEditMarketName" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label data-i18n="full_name">Authorized Representative</label>
+            <input type="text" id="buyerEditFullName" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label data-i18n="state">State</label>
+            <select id="buyerEditState" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="district">District</label>
+            <select id="buyerEditDistrict" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="mandal">Mandal</label>
+            <select id="buyerEditMandal" class="form-control" required></select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" data-i18n="save">Save Changes</button>
+          <button type="button" class="btn btn-secondary btn-block mt-2" onclick="closeModal('buyerEditProfileModal')">← Cancel / Back</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="buyerDetailsModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Verified Buyer Procurement Details</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="buyerDetailsContent"></div>
+        <button type="button" class="btn btn-secondary btn-block mt-4" onclick="window.closeModal('buyerDetailsModal')">← Back to Listings</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="farmerDetailsModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Fresh Produce Lot & Farmer Details</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="farmerDetailsContent"></div>
+        <button type="button" class="btn btn-secondary btn-block mt-4" onclick="window.closeModal('farmerDetailsModal')">← Back to Listings</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="buyerEditReqModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Crop Requirement</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="buyerEditReqForm">
+          <input type="hidden" id="buyerEditReqId" />
+          <div class="form-group">
+            <label data-i18n="crop_name">Crop Name</label>
+            <input type="text" id="buyerEditReqCrop" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label data-i18n="quantity">Quantity (Quintals)</label>
+            <input type="number" step="1" id="buyerEditReqQuantity" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label data-i18n="quality">Quality Required</label>
+            <select id="buyerEditReqQuality" class="form-control" required>
+              <option value="A">Grade A (Premium)</option>
+              <option value="B">Grade B (Standard Commercial)</option>
+              <option value="C">Grade C (Any)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="buying_price">Buying Price (₹/Quintal)</label>
+            <input type="number" step="1" id="buyerEditReqPrice" class="form-control" required />
+          </div>
+          <button type="submit" id="btnSubmitBuyerEditReq" class="btn btn-primary btn-block btn-lg font-bold" data-i18n="save">✅ Submit & Update Requirement</button>
+          <button type="button" class="btn btn-secondary btn-block mt-2" onclick="window.closeModal('buyerEditReqModal')">← Cancel / Back</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. CROP PURCHASE & 5-STAR QUALITY RATING MODAL -->
+  <div id="cropPurchaseRatingModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3>⭐ Purchase Crop & Rate Quality</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="purchaseModalCropSummary" class="mb-4 p-3 bg-stone-50 rounded-lg border border-stone-200">
+          <h4 id="purchaseCropTitle" class="font-bold text-green-900 text-lg">Crop Name</h4>
+          <p id="purchaseCropFarmer" class="text-sm text-stone-600">Farmer: -</p>
+          <p id="purchaseCropLot" class="text-xs text-stone-500">Available: - Quintals</p>
+        </div>
+
+        <form id="cropPurchaseRatingForm" onsubmit="return window.handleCropPurchaseRatingSubmit(event)">
+          <input type="hidden" id="purchaseRatingCropId" />
+          <input type="hidden" id="purchaseRatingFarmerId" />
+          <input type="hidden" id="purchaseRatingScore" value="5" />
+
+          <div class="form-group text-center">
+            <label class="block font-bold mb-2">Rate Crop Quality (1 to 5 Stars) *</label>
+            <div id="starRatingPicker" class="star-rating-picker">
+              <span class="star-btn active" data-rating="1">★</span>
+              <span class="star-btn active" data-rating="2">★</span>
+              <span class="star-btn active" data-rating="3">★</span>
+              <span class="star-btn active" data-rating="4">★</span>
+              <span class="star-btn active" data-rating="5">★</span>
+            </div>
+            <div id="starRatingDesc" class="text-sm font-semibold text-amber-600 mt-1">5 Stars — Excellent / Premium Produce Quality</div>
+          </div>
+
+          <div class="form-group">
+            <label>Quality Feedback & Remarks (Optional)</label>
+            <textarea id="purchaseRatingReview" class="form-control" rows="3" placeholder="e.g. Moisture levels were strictly below 12%, clean grains, prompt dispatch."></textarea>
+          </div>
+
+          <div class="p-3 mb-3 bg-amber-50 rounded border border-amber-200 text-xs text-amber-800">
+            ℹ️ Submitting purchase confirmation and rating will mark this crop listing as <strong>Purchased</strong> and disable it from the active marketplace display for all buyers.
+          </div>
+
+          <button type="submit" id="btnSubmitPurchaseRating" class="btn btn-primary btn-block btn-lg font-bold">
+            ✅ Confirm Purchase & Submit 5-Star Rating
+          </button>
+          <button type="button" class="btn btn-secondary btn-block mt-2" onclick="window.closeModal('cropPurchaseRatingModal')">
+            ← Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. INCOMING CALL NOTIFICATION MODAL -->
+  <div id="incomingCallModal" class="modal-overlay" style="z-index: 100000;">
+    <div class="modal-card incoming-call-card">
+      <div class="call-pulse-avatar">
+        <div class="pulse-ring"></div>
+        <span class="call-avatar-icon">📞</span>
+      </div>
+      <h3 id="incomingCallerName" class="incoming-caller-name">Caller Name</h3>
+      <div class="incoming-badge-wrap">
+        <span id="incomingCallerTypeBadge" class="incoming-caller-badge">Verified Partner</span>
+      </div>
+      <p id="incomingCallType" class="incoming-call-sub">Incoming Voice Call...</p>
+      
+      <div class="incoming-actions">
+        <button type="button" class="btn btn-danger btn-lg btn-reject-call font-bold" onclick="window.rejectIncomingCall()">
+          ✕ Decline
+        </button>
+        <button type="button" class="btn btn-success btn-lg btn-accept-call font-bold" onclick="window.acceptIncomingCall()">
+          ✓ Accept Call
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. ACTIVE CALL SCREEN MODAL -->
+  <div id="activeCallModal" class="modal-overlay" style="z-index: 100001;">
+    <div class="modal-card active-call-card">
+      <div class="active-call-header">
+        <div>
+          <h3 id="callPartnerName" class="active-call-title">Partner Name</h3>
+          <span id="callTypeBadge" class="call-type-indicator">📞 WebRTC Voice Call</span>
+        </div>
+        <div id="callDurationDisplay" class="call-timer-badge">Connecting...</div>
+      </div>
+
+      <div class="active-call-body">
+        <!-- Voice Call Waveform & Avatar -->
+        <div id="callVoiceWaveform" class="voice-call-display">
+          <div class="voice-avatar">🌾</div>
+          <div class="voice-waves">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <!-- Video Frames -->
+        <div class="video-streams-wrap">
+          <video id="callRemoteVideo" class="remote-video-frame hidden" autoplay playsinline></video>
+          <video id="callLocalVideo" class="local-video-preview hidden" autoplay playsinline muted></video>
+          <audio id="callRemoteAudio" autoplay></audio>
+        </div>
+      </div>
+
+      <div class="active-call-controls">
+        <button type="button" id="btnCallMute" class="btn btn-call-ctrl" onclick="window.toggleMute()">
+          🎙️ Mute
+        </button>
+        <button type="button" id="btnCallCamera" class="btn btn-call-ctrl" onclick="window.toggleCamera()">
+          📹 Cam On
+        </button>
+        <button type="button" id="btnCallEnd" class="btn btn-danger btn-call-end font-bold" onclick="window.endCurrentCall()">
+          ☎ End Call
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <!-- Scripts in strict order with cache-busting version parameter -->
+  <script src="js/config.js?v=20260909_06"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="js/language.js?v=20260909_06"></script>
+  <script src="js/main.js?v=20260909_06"></script>
+  <script src="js/auth.js?v=20260909_06"></script>
+  <script src="js/communication.js?v=20260909_06"></script>
+  <script src="js/farmer.js?v=20260909_06"></script>
+  <script src="js/buyer.js?v=20260909_06"></script>
+  <script src="js/mandiPrices.js?v=20260909_06"></script>
+</body>
+</html>

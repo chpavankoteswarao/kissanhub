@@ -1,0 +1,29 @@
+{
+  "name": "kissan-hub",
+  "version": "1.0.0",
+  "description": "KISSAN-HUB - Smart Agriculture Marketplace connecting Farmers, Verified Buyers, Administrators and an AI Agricultural Assistant",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "keywords": [
+    "agritech",
+    "agriculture",
+    "marketplace",
+    "farmers",
+    "buyers",
+    "ai"
+  ],
+  "author": "KISSAN-HUB Team",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "socket.io": "^4.8.3",
+    "sqlite3": "^5.1.7"
+  }
+}

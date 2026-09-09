@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KISSAN-HUB — Dedicated Administration Portal</title>
+  <link rel="stylesheet" href="css/style.css?v=20260907_07" />
+  <link rel="stylesheet" href="css/mandiPrices.css?v=20260909_04" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS Integration for Admin Portal -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandCream: '#faf8f5',
+            brandTerracotta: '#c85a17',
+            brandGreen: '#1b5e20',
+            brandGreenLight: '#2e7d32',
+            brandGreenDark: '#0f3813'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Newsreader', 'Georgia', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .admin-auth-wrapper {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .admin-auth-box {
+      max-width: 440px;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .admin-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #0f3813;
+      color: #ffffff;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+  </style>
+</head>
+<body style="background-color: #f1f5f9;">
+
+  <!-- Admin Top Navbar -->
+  <header class="navbar" style="border-bottom: 2px solid #0f3813;">
+    <div class="nav-container">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 1.6rem;">🛡️</span>
+        <div>
+          <span style="font-weight: 800; font-size: 1.25rem; color: #0f3813;">KISSAN-HUB</span>
+          <span style="font-size: 0.75rem; background: #e2e8f0; color: #334155; padding: 0.15rem 0.45rem; border-radius: 4px; margin-left: 0.4rem; font-weight: 700;">ADMIN PORTAL</span>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <a href="/" class="btn btn-secondary btn-sm">← Back to Marketplace</a>
+        <button id="adminSiteLogoutBtn" class="btn btn-danger btn-sm hidden">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section 1: Admin Authentication Gate -->
+  <main id="adminAuthGate" class="admin-auth-wrapper">
+    <div class="admin-auth-box">
+      <div class="text-center">
+        <div class="admin-logo-badge">RESTRICTED ECOSYSTEM ACCESS</div>
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #0f3813; margin-bottom: 0.4rem;">Admin Portal</h2>
+        <p class="text-muted text-sm" style="margin-bottom: 1.75rem;">Please enter authorized system credentials to supervise marketplace activity.</p>
+      </div>
+
+      <form id="adminStandaloneLoginForm">
+        <div class="form-group">
+          <label>Admin Username</label>
+          <input type="text" id="adminSiteUser" class="form-control" value="admin" required />
+        </div>
+        <div class="form-group">
+          <label>Admin Password</label>
+          <input type="password" id="adminSitePass" class="form-control" value="Admin@KissanHub2026" required />
+          <div class="form-hint">Default: <strong>admin</strong> / <strong>Admin@KissanHub2026</strong></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-2">Authorize & Access Portal</button>
+        <a href="/" class="btn btn-secondary btn-block mt-2">← Back to Main Marketplace</a>
+      </form>
+    </div>
+  </main>
+
+  <!-- Section 2: Dedicated Admin Dashboard -->
+  <main id="adminMainContent" class="dashboard-container hidden" style="margin-top: 2rem;">
+    <!-- Admin Top Toolbar with Back & Logout Buttons -->
+    <div class="dashboard-header-toolbar" style="margin-bottom: 1.5rem; background: #ffffff; padding: 0.85rem 1.25rem; border-radius: 8px; border: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); flex-wrap: wrap; gap: 0.75rem;">
+      <a href="/" class="btn btn-secondary btn-sm" style="font-weight: 700;">← Back to Main Marketplace</a>
+      <div style="font-weight: 700; color: #0f3813; font-size: 0.95rem;">🛡️ Administrator Session Active</div>
+      <button class="btn btn-danger btn-sm" onclick="logoutUser(); window.location.reload();">🚪 Logout Admin</button>
+    </div>
+
+    <div class="dashboard-header">
+      <div class="dashboard-user-greeting">
+        <h2>Marketplace Command Center 🛡️</h2>
+        <p>Real-time audit of registered farmers, institutional buyers, active 5-day crop listings, and daily APMC benchmark prices.</p>
+      </div>
+    </div>
+
+    <!-- Statistics Overview Grid -->
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <div class="stat-title" data-i18n="stat_total_farmers">Total Farmers</div>
+        <div id="statAdminFarmers" class="stat-number">0</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="stat-title" data-i18n="stat_total_buyers">Total Buyers</div>
+        <div id="statAdminBuyers" class="stat-number">0</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="stat-title" data-i18n="stat_active_crops">Active 5-Day Crops</div>
+        <div id="statAdminActiveCrops" class="stat-number text-success">0</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="stat-title" data-i18n="stat_expired_crops">Expired Crops</div>
+        <div id="statAdminExpiredCrops" class="stat-number text-muted">0</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="stat-title" data-i18n="stat_requirements">Active Requirements</div>
+        <div id="statAdminReqs" class="stat-number">0</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="dashboard-nav-tabs">
+      <button id="btnAdminTabOverview" class="tab-btn active">Marketplace Overview</button>
+      <button id="btnAdminTabFarmers" class="tab-btn">Farmers</button>
+      <button id="btnAdminTabBuyers" class="tab-btn">Buyers</button>
+      <button id="btnAdminTabCrops" class="tab-btn">Crop Listings</button>
+      <button id="btnAdminTabReqs" class="tab-btn">Requirements</button>
+      <button id="btnAdminTabPrices" class="tab-btn">Mandi Benchmark Price Data</button>
+      <button id="btnAdminTabMandi" class="tab-btn">Live Mandi Sync (OGD) 🏛️</button>
+    </div>
+
+    <!-- Tab 1: Overview -->
+    <div id="adminContentOverview" class="dashboard-panel">
+      <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+        <div>
+          <h4 class="mb-2 font-bold">🌾 Active Crop Lots Supply Distribution</h4>
+          <div id="adminSupplyBreakdown" class="mt-2"></div>
+        </div>
+        <div>
+          <h4 class="mb-2 font-bold">🏢 Buyer Procurement Demand Distribution</h4>
+          <div id="adminDemandBreakdown" class="mt-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Farmers -->
+    <div id="adminContentFarmers" class="dashboard-panel hidden">
+      <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <h3>Registered Farmers</h3>
+        <input type="text" id="adminFarmerSearch" class="form-control" placeholder="Search by name or phone..." style="max-width: 300px;" />
+      </div>
+      <div id="adminFarmersListTable" class="table-responsive"></div>
+    </div>
+
+    <!-- Tab 3: Buyers -->
+    <div id="adminContentBuyers" class="dashboard-panel hidden">
+      <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <h3>Registered Buyers</h3>
+        <input type="text" id="adminBuyerSearch" class="form-control" placeholder="Search by market or phone..." style="max-width: 300px;" />
+      </div>
+      <div id="adminBuyersListTable" class="table-responsive"></div>
+    </div>
+
+    <!-- Tab 4: Crops -->
+    <div id="adminContentCrops" class="dashboard-panel hidden">
+      <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <h3>Crop Listings (Active & Expired)</h3>
+        <div style="display: flex; gap: 0.5rem;">
+          <select id="adminCropStatusFilter" class="form-control" style="max-width: 160px;">
+            <option value="">All Statuses</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="EXPIRED">EXPIRED</option>
+          </select>
+          <input type="text" id="adminCropSearch" class="form-control" placeholder="Search crop or farmer..." style="max-width: 250px;" />
+        </div>
+      </div>
+      <div id="adminCropsListTable" class="table-responsive"></div>
+    </div>
+
+    <!-- Tab 5: Requirements -->
+    <div id="adminContentReqs" class="dashboard-panel hidden">
+      <div class="panel-header">
+        <h3>Buyer Procurement Demands</h3>
+      </div>
+      <div id="adminRequirementsListTable" class="table-responsive"></div>
+    </div>
+
+    <!-- Tab 6: Prices Management -->
+    <div id="adminContentPrices" class="dashboard-panel hidden">
+      <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+          <h3>Mandi Benchmark Price Data Management</h3>
+          <p>Verified daily APMC market prices referenced by farmers, buyers, and the AI assistant.</p>
+        </div>
+        <button id="btnOpenAddPriceModal" class="btn btn-primary">Add Mandi Price</button>
+      </div>
+      <div id="adminPricesListTable" class="table-responsive"></div>
+    </div>
+
+    <!-- Tab 7: Gov Mandi Live Sync Status -->
+    <div id="adminContentMandi" class="dashboard-panel hidden">
+      <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+          <h3>🏛️ Government Mandi Price Live Data Sync</h3>
+          <p>Supervise integration with the official Government of India Open Government Data (data.gov.in) API.</p>
+        </div>
+        <button id="btnAdminMandiSyncNow" class="btn btn-primary" onclick="adminSyncMandiNow()">🔄 Sync Live Data Now</button>
+      </div>
+
+      <!-- Sync Status Grid -->
+      <div class="admin-stats-grid" style="margin-top: 1rem; margin-bottom: 1.5rem;">
+        <div class="admin-stat-card">
+          <div class="stat-title">API Connection Status</div>
+          <div id="adminMandiApiStatus" class="stat-number" style="font-size: 1.3rem;">Checking...</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="stat-title">API Key Configured</div>
+          <div id="adminMandiKeyConfigured" class="stat-number" style="font-size: 1.3rem;">Checking...</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="stat-title">Cached Gov Records</div>
+          <div id="adminMandiCachedCount" class="stat-number text-success">0</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="stat-title">Latest Gov Arrival Date</div>
+          <div id="adminMandiArrivalDate" class="stat-number" style="font-size: 1.2rem; color: #1e3a8a;">-</div>
+        </div>
+      </div>
+
+      <!-- Detailed Info Card -->
+      <div class="card" style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;">
+        <h4 style="font-weight: 700; color: #0f3813; margin-bottom: 0.75rem;">📡 Integration Details</h4>
+        <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+          <div><strong>OGD Resource ID:</strong> <code id="adminMandiResourceId" style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">-</code></div>
+          <div><strong>Cache Lifetime:</strong> <span id="adminMandiCacheMinutes">30</span> Minutes</div>
+          <div><strong>Last Attempted Sync:</strong> <span id="adminMandiLastSyncTime">-</span></div>
+          <div><strong>Last Sync Status:</strong> <span id="adminMandiLastSyncStatus">-</span></div>
+        </div>
+        <div id="adminMandiSyncMessage" style="margin-top: 1rem; padding: 0.75rem; border-radius: 6px; display: none;"></div>
+      </div>
+
+      <!-- Full Government Mandi Price Explorer (Parity with Farmer & Buyer Dashboards) -->
+      <div class="mandi-filter-bar" style="margin-top: 1rem;">
+        <form id="adminGovMandiSearchForm">
+          <div class="mandi-filter-grid">
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">Commodity</label>
+              <select id="adminMandiCropSelect" class="form-control gov-mandi-crop-select">
+                <option value="">-- All Commodities --</option>
+                <option value="Tomato">Tomato</option>
+                <option value="Paddy">Paddy (Dhan)</option>
+                <option value="Maize">Maize</option>
+                <option value="Cotton">Cotton</option>
+                <option value="Chilli">Chilli Red</option>
+                <option value="Groundnut">Groundnut</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Onion">Onion</option>
+                <option value="Potato">Potato</option>
+                <option value="Soyabean">Soyabean</option>
+                <option value="Mustard">Mustard</option>
+                <option value="Turmeric">Turmeric</option>
+                <option value="Bajra">Bajra</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">State</label>
+              <select id="adminMandiStateSelect" class="form-control gov-mandi-state-select">
+                <option value="">-- All States --</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Gujarat">Gujarat</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">District (Optional)</label>
+              <input type="text" id="adminMandiDistrictInput" class="form-control" placeholder="e.g. Kurnool, Warangal..." />
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold text-slate-700">Market / Mandi (Optional)</label>
+              <input type="text" id="adminMandiMarketInput" class="form-control" placeholder="e.g. Adoni, Bowenpally..." />
+            </div>
+
+            <div class="mandi-filter-actions">
+              <button type="submit" class="btn btn-primary btn-block font-bold">
+                🔍 Check Mandi Rates
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Freshness & Attribution Banner -->
+      <div id="adminGovMandiMeta" style="margin-top: 1rem;"></div>
+
+      <!-- Government Mandi Results (Comparison Table & Cards) -->
+      <div id="adminGovMandiResults" style="margin-top: 1rem;"></div>
+    </div>
+  </main>
+
+  <!-- Modals -->
+  <!-- Admin Add Price Modal -->
+  <div id="adminAddPriceModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add Verified Mandi Benchmark Price</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="adminAddPriceForm">
+          <div class="form-group">
+            <label>Crop Name *</label>
+            <input type="text" id="adminPriceCrop" class="form-control" placeholder="e.g. Paddy" required />
+          </div>
+          <div class="form-group">
+            <label>Market / Mandi Name *</label>
+            <input type="text" id="adminPriceMarket" class="form-control" placeholder="e.g. Bowenpally APMC Mandi" required />
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="adminPriceState" class="form-control" placeholder="e.g. Telangana" />
+          </div>
+          <div class="form-group">
+            <label>District</label>
+            <input type="text" id="adminPriceDistrict" class="form-control" placeholder="e.g. Hyderabad" />
+          </div>
+          <div class="form-group">
+            <label>Price (₹) *</label>
+            <input type="number" step="1" id="adminPriceAmount" class="form-control" placeholder="2350" required />
+          </div>
+          <div class="form-group">
+            <label>Unit</label>
+            <input type="text" id="adminPriceUnit" class="form-control" value="₹/Quintal" required />
+          </div>
+          <div class="form-group">
+            <label>Price Date</label>
+            <input type="date" id="adminPriceDate" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Source</label>
+            <input type="text" id="adminPriceSource" class="form-control" value="Agmarknet / APMC Official Feed" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Record Mandi Price</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Farmer Details Modal -->
+  <div id="adminFarmerDetailsModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3>Farmer Audit & Listings Record</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="adminFarmerDetailsContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Buyer Details Modal -->
+  <div id="adminBuyerDetailsModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3>Buyer Audit & Demand Records</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="adminBuyerDetailsContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js?v=20260909_06"></script>
+  <script src="js/language.js?v=20260909_06"></script>
+  <script src="js/main.js?v=20260909_06"></script>
+  <script src="js/mandiPrices.js?v=20260909_06"></script>
+  <script src="js/admin.js?v=20260909_06"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const session = getSession();
+      const authGate = getElement('adminAuthGate');
+      const mainContent = getElement('adminMainContent');
+      const logoutBtn = getElement('adminSiteLogoutBtn');
+
+      if (session && session.userType === 'admin' && session.token) {
+        authGate.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+        if (window.initAdminDashboard) window.initAdminDashboard();
+      } else {
+        authGate.classList.remove('hidden');
+        mainContent.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+      }
+
+      const loginForm = getElement('adminStandaloneLoginForm');
+      if (loginForm) {
+        loginForm.onsubmit = async (e) => {
+          e.preventDefault();
+          const username = getElement('adminSiteUser').value.trim();
+          const password = getElement('adminSitePass').value;
+
+          const res = await apiRequest('/auth/admin/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+          });
+
+          if (res.ok && res.data) {
+            saveSession(res.data);
+            showMessage('Admin authentication successful.', 'success');
+            authGate.classList.add('hidden');
+            mainContent.classList.remove('hidden');
+            logoutBtn.classList.remove('hidden');
+            if (window.initAdminDashboard) window.initAdminDashboard();
+          } else {
+            showMessage(res.message || 'Invalid admin credentials.', 'error');
+          }
+        };
+      }
+
+      if (logoutBtn) {
+        logoutBtn.onclick = () => {
+          logoutUser();
+          window.location.reload();
+        };
+      }
+    });
+  </script>
+</body>
+</html>
