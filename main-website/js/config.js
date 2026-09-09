@@ -15,7 +15,7 @@
 
 window.KISSAN_CONFIG = {
   // 👉 PASTE YOUR RENDER BACKEND URL HERE WHEN DEPLOYING:
-  BACKEND_URL: ''
+  BACKEND_URL: ' https://kissan-hub-backend.onrender.com'
 };
 
 (function () {
