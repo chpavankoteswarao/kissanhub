@@ -1,7 +1,7 @@
 // KISSAN-HUB — main.js
 // Central source of truth for utilities, API calls, sessions, modals, navigation & location
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = window.API_BASE_URL || (window.KISSAN_CONFIG && window.KISSAN_CONFIG.BACKEND_URL ? (window.KISSAN_CONFIG.BACKEND_URL.replace(/\/+$/, '') + '/api') : '/api');
 
 const AppState = {
   session: null,
@@ -180,8 +180,6 @@ window.closeModal = (modalId) => {
 
 const openModal = window.openModal;
 const closeModal = window.closeModal;
-window.showMessage = showMessage;
-window.getElement = getElement;
 
 const showMessage = (text, type = 'info') => {
   const container = getElement('toastContainer');
@@ -201,6 +199,9 @@ const showMessage = (text, type = 'info') => {
     setTimeout(() => toast.remove(), 400);
   }, 3500);
 };
+
+window.showMessage = showMessage;
+window.getElement = getElement;
 
 // Session handling
 const saveSession = (sessionData) => {
@@ -225,16 +226,6 @@ const getSession = () => {
 const clearSession = () => {
   AppState.session = null;
   localStorage.removeItem('kissanHubSession');
-};
-
-const logoutUser = async () => {
-  try {
-    await apiRequest('/auth/logout', { method: 'POST' });
-  } catch (e) {}
-  clearSession();
-  showMessage('Logged out successfully.', 'info');
-  showView('landingView');
-  updateNavHeader();
 };
 
 const showView = (viewId) => {
@@ -262,6 +253,22 @@ const showView = (viewId) => {
 
   updateNavHeader();
 };
+
+const logoutUser = async () => {
+  try {
+    await apiRequest('/auth/logout', { method: 'POST' });
+  } catch (e) {}
+  clearSession();
+  showMessage('Logged out successfully.', 'info');
+  showView('landingView');
+  updateNavHeader();
+};
+
+window.showView = showView;
+window.saveSession = saveSession;
+window.getSession = getSession;
+window.clearSession = clearSession;
+window.logoutUser = logoutUser;
 
 const updateNavHeader = () => {
   const session = getSession();
